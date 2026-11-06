@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#F7F3EE" />
+    <title>我的书库 · BOOKSPACE</title>
+    <link rel="stylesheet" href="图书馆理模块/Content/BookManagement.css" />
+</head>
+<body data-api-base="/api">
+    <div class="app-shell">
+        <aside class="sidebar">
+            <a class="brand" href="#" aria-label="BOOKSPACE 书库首页">
+                <span class="brand-glyph" aria-hidden="true"><span class="glyph-leaf"></span><span class="glyph-page"></span></span>
+                <span>bookspace<small>你的私人书籍档案</small></span>
+            </a>
+            <div class="nav-heading">LIBRARY</div>
+            <nav class="main-nav" aria-label="书库导航">
+                <button type="button" class="nav-item is-active" id="nav-shelf" aria-current="page">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="4.5" width="5" height="15" rx="1"/><rect x="10" y="4.5" width="5" height="15" rx="1"/><path d="m17 7 3.5 11.5M2.5 20h19"/></svg>
+                    发现书籍<span class="nav-count" id="nav-book-count">—</span>
+                </button>
+                <button type="button" class="nav-item" id="nav-list">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M4 6h1M4 12h1M4 18h1"/></svg>
+                    书目清单
+                </button>
+                <a class="nav-item library-nav-link" href="__circulation_demo.html">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="14" height="16" rx="2"/><path d="M8 8h7M8 12h5M20 10v8m-3-3 3 3 3-3"/></svg>
+                    馆藏流通
+                </a>
+            </nav>
+            <div class="nav-heading categories-heading">CATEGORIES</div>
+            <nav class="category-nav" id="sidebar-categories" aria-label="图书分类">
+                <button type="button" class="category-link is-active" data-category="">全部书籍<span id="all-cat-count">—</span></button>
+            </nav>
+            <div class="sidebar-bottom">
+                <div class="side-ornament" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+                <span>COLLECTED WITH CARE</span>
+                <p>书，是可以慢慢生长的世界。</p>
+            </div>
+        </aside>
+
+        <main class="main-area" id="main-content">
+            <div class="topbar">
+                <div class="breadcrumbs">MY LIBRARY <span>/</span> <strong id="breadcrumb-current">发现书籍</strong></div>
+                <div class="topbar-right"><span class="live-dot" aria-hidden="true"></span><span>PERSONAL COLLECTION</span></div>
+            </div>
+            <div class="page">
+                <header class="page-head">
+                    <div class="page-heading">
+                        <span class="overline">THE PERSONAL LIBRARY <span class="little-rule"></span> CURATED WITH CARE</span>
+                        <h1>我的书架</h1>
+                        <p>让每一本喜欢的书，都有值得停留的一眼。</p>
+                    </div>
+                    <div class="page-actions">
+                        <button type="button" class="button button-outline" id="refresh-books">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.2 5.5M20 4v7h-7"/></svg>刷新
+                        </button>
+                        <a class="button button-outline library-nav-link" href="__circulation_demo.html">馆藏流通</a>
+                        <button type="button" class="button button-dark" id="add-book">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>添加书籍
+                        </button>
+                    </div>
+                </header>
+
+                <section class="collection-section" aria-label="馆藏书架">
+                    <div class="section-heading">
+                        <div>
+                            <div class="section-kicker">THE COLLECTION <span class="section-line"></span> EXPLORE</div>
+                            <h2 id="section-title">馆藏书籍 <span class="count" id="visible-count">—</span></h2>
+                            <p id="section-description">翻开书架，重新发现属于你的收藏。</p>
+                        </div>
+                        <div class="view-switch" role="group" aria-label="查看方式">
+                            <button type="button" class="switch-btn is-active" id="view-gallery" aria-pressed="true" title="封面视图">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1"/><rect x="13.5" y="3.5" width="7" height="7" rx="1"/><rect x="3.5" y="13.5" width="7" height="7" rx="1"/><rect x="13.5" y="13.5" width="7" height="7" rx="1"/></svg>
+                                <span>封面</span>
+                            </button>
+                            <button type="button" class="switch-btn" id="view-list" aria-pressed="false" title="列表视图">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h1M3 12h1M3 18h1"/></svg>
+                                <span>清单</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="toolbar">
+                        <label class="search-field" for="search-input">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.7"/><path d="m16 16 5 5"/></svg>
+                            <input id="search-input" type="search" autocomplete="off" placeholder="找一本书、一个作者、一个出版社…" />
+                            <kbd aria-hidden="true">⌕</kbd>
+                        </label>
+                        <label class="sort-field" for="sort-books"><span>排序</span>
+                            <select id="sort-books" aria-label="书籍排序方式"><option value="latest">最近编号</option><option value="name">书名 A–Z</option><option value="price-up">价格由低到高</option><option value="price-down">价格由高到低</option></select>                        </label>
+                    </div>
+                    <div class="filter-line">
+                        <div class="filter-chips" id="category-filters" aria-label="按分类筛选"></div>
+                        <div class="filter-hint" id="filter-hint"></div>
+                    </div>
+                    <div id="notice" class="notice" role="status" aria-live="polite" hidden></div>
+
+                    <div id="book-grid" class="book-grid" aria-live="polite" aria-label="书籍封面"></div>
+                    <div id="book-table-section" class="table-container" hidden>
+                        <table>
+                            <thead><tr><th scope="col">书籍</th><th scope="col">作者</th><th scope="col">分类</th><th scope="col">出版社</th><th scope="col">价格</th><th scope="col">操作</th></tr></thead>
+                            <tbody id="book-list"></tbody>
+                        </table>
+                    </div>
+                    <div id="empty-state" class="empty-state" hidden>
+                        <div class="empty-illustration" aria-hidden="true"><span></span><span></span><span></span></div>
+                        <h3 id="empty-title">书架暂时还是空的</h3>
+                        <p id="empty-description">从添加第一本书开始，建立属于自己的书库。</p>
+                        <button type="button" class="button button-outline" id="empty-action">添加第一本书</button>
+                    </div>
+                    <div class="collection-footer"><span>BOOKSPACE · A HOME FOR EVERY BOOK</span><span id="footer-tally"></span></div>
+                </section>
+                <section id="featured-section" class="featured-section" aria-label="书架焦点" hidden>
+                    <div class="featured-copy">
+                        <span class="featured-eyebrow"><span class="eyebrow-spark"></span> FROM YOUR SHELF</span>
+                        <div class="featured-index">NO. <span id="featured-index">001</span> <i></i> A CLOSER LOOK</div>
+                        <h2 id="featured-title"></h2>
+                        <p id="featured-author"></p>
+                        <div class="featured-divider"></div>
+                        <button type="button" class="featured-read" id="featured-open">走近这本书 <span aria-hidden="true">↗</span></button>
+                    </div>
+                    <div class="featured-art">
+                        <div class="featured-ring ring-one"></div><div class="featured-ring ring-two"></div>
+                        <div class="featured-halo"></div>
+                        <div class="featured-book-mount" id="featured-cover"></div>
+                        <span class="featured-art-caption">A BOOK WORTH A SECOND LOOK</span>
+                    </div>
+                </section>
+
+                <footer class="page-footer">一本书，一段时光。<span>EST. YOUR OWN LIBRARY</span></footer>
+            </div>
+        </main>
+    </div>
+
+    <div class="overlay" id="detail-overlay" hidden>
+        <section class="side-panel detail-panel" role="dialog" aria-modal="true" aria-labelledby="detail-title">
+            <div class="panel-top"><span>BOOK PROFILE / 书籍档案</span><button type="button" class="icon-close" id="close-detail" aria-label="关闭书籍详情">×</button></div>
+            <div class="detail-art"><div id="detail-cover"></div></div>
+            <span class="detail-caption" id="detail-category"></span>
+            <h2 id="detail-title"></h2>
+            <p class="detail-author" id="detail-author"></p>
+            <div class="detail-specs">
+                <div><span>出版社</span><strong id="detail-publisher"></strong></div>
+                <div><span>参考价格</span><strong id="detail-price"></strong></div>
+                <div><span>书籍编号</span><strong id="detail-id"></strong></div>
+            </div>
+            <div class="panel-actions detail-actions">
+                <button type="button" class="button button-outline" id="detail-delete">删除书籍</button>
+                <button type="button" class="button button-dark" id="detail-edit">编辑资料 <span aria-hidden="true">↗</span></button>
+            </div>
+        </section>
+    </div>
+
+    <div id="editor-overlay" class="overlay" hidden>
+        <section class="side-panel editor-panel" role="dialog" aria-modal="true" aria-labelledby="form-title">
+            <div class="panel-top"><span>COLLECTION MANAGEMENT / 馆藏整理</span><button type="button" class="icon-close" id="close-editor" aria-label="关闭编辑面板">×</button></div>
+            <div class="editor-heading"><div class="section-kicker">YOUR LIBRARY, YOUR STORY</div><h2 id="form-title">添加一本好书</h2><p>为这本书补上属于它的资料。</p></div>
+            <form id="book-form">
+                <input id="book-num" type="hidden" />
+                <label for="book-name">书名 <em>*</em><input id="book-name" type="text" required maxlength="50" placeholder="这本书叫什么名字？" /></label>
+                <div class="two-cols">
+                    <label for="author">作者<input id="author" type="text" maxlength="30" placeholder="作者姓名" /></label>
+                    <label for="book-price">参考价格（元）<input id="book-price" type="number" min="0" max="9999.99" step="0.01" value="0" required /></label>
+                </div>
+                <label for="publisher">出版社<input id="publisher" type="text" maxlength="100" placeholder="出版社名称" /></label>
+                <label for="category">分类 <em>*</em><select id="category" required><option value="">选择合适的分类</option></select></label>
+                <p class="form-hint">封面由书名与分类自动排版生成，不会伪装成真实的出版封面。</p>
+                <p id="form-error" class="form-error" role="alert" hidden></p>
+                <div class="panel-actions">
+                    <button type="button" class="button button-outline" id="cancel-editor">取消</button>
+                    <button type="submit" class="button button-dark" id="submit-book">保存到书库</button>
+                </div>
+            </form>
+        </section>
+    </div>
+    <script src="图书馆理模块/Scripts/jquery-3.4.1.min.js"></script>
+    <script>
+(function(){
+ var categories=[
+  {CategoryId:1,CategoryName:"文学随笔"},
+  {CategoryId:2,CategoryName:"设计美学"},
+  {CategoryId:3,CategoryName:"科学探索"},
+  {CategoryId:4,CategoryName:"计算机"},
+  {CategoryId:5,CategoryName:"生活方式"}
+ ];
+ var catalog=[
+  {BookNum:112,BookName:"山海之间",Author:"林澈",Publisher:"示例出版社",BookPrice:59,CategoryId:1},
+  {BookNum:111,BookName:"设计中的秩序",Author:"沈知",Publisher:"示例出版社",BookPrice:86,CategoryId:2},
+  {BookNum:110,BookName:"光的来信",Author:"江序",Publisher:"示例出版社",BookPrice:48,CategoryId:1},
+  {BookNum:109,BookName:"思考的边界",Author:"向野",Publisher:"示例出版社",BookPrice:69,CategoryId:3},
+  {BookNum:108,BookName:"算法与诗",Author:"陆深",Publisher:"示例出版社",BookPrice:72,CategoryId:4},
+  {BookNum:107,BookName:"风的形状",Author:"程央",Publisher:"示例出版社",BookPrice:56,CategoryId:2},
+  {BookNum:106,BookName:"城市散步",Author:"周岭",Publisher:"示例出版社",BookPrice:42,CategoryId:5},
+  {BookNum:105,BookName:"星空手记",Author:"叶远",Publisher:"示例出版社",BookPrice:68,CategoryId:3},
+  {BookNum:104,BookName:"时间的纹理",Author:"苏言",Publisher:"示例出版社",BookPrice:78,CategoryId:2},
+  {BookNum:103,BookName:"万物生长的秘密",Author:"温禾",Publisher:"示例出版社",BookPrice:54,CategoryId:3},
+  {BookNum:102,BookName:"代码与世界",Author:"黎一",Publisher:"示例出版社",BookPrice:91,CategoryId:4},
+  {BookNum:101,BookName:"留住日常的光",Author:"罗言",Publisher:"示例出版社",BookPrice:45,CategoryId:5}
+ ];
+ function display(){return catalog.map(function(b){
+  var o=Object.assign({},b);
+  o.CategoryName=categories.find(function(c){return c.CategoryId===b.CategoryId}).CategoryName;
+  return o;
+ });}
+ var original=jQuery.ajax;
+ window.__bookspaceDemo={catalog:catalog,categories:categories,fail:false};
+ jQuery.ajax=function(config){
+  var url=(config&&config.url)||"";
+  if(!/\/api\/(Books|Categories)(?:\/\d+)?$/.test(url))return original.apply(this,arguments);
+  var d=jQuery.Deferred();
+  setTimeout(function(){
+   if(window.__bookspaceDemo.fail){d.reject({status:503,responseJSON:{Message:"模拟连接不可用"}});return;}
+   var method=(config.method||config.type||"GET").toUpperCase();
+   if(url.indexOf("/Categories")>=0){d.resolve(categories.map(function(c){return Object.assign({},c)}));return;}
+   if(method==="GET"){d.resolve(display());return;}
+   var payload=config.data?JSON.parse(config.data):{};
+   if(method==="POST"){payload.BookNum=catalog.reduce(function(m,b){return Math.max(m,b.BookNum)},0)+1;catalog.push(payload);d.resolve(payload);return;}
+   var matched=url.match(/\/Books\/(\d+)$/);
+   var id=matched?Number(matched[1]):null;
+   var idx=catalog.findIndex(function(b){return b.BookNum===id});
+   if(idx<0){d.reject({status:404,responseJSON:{Message:"未找到书籍"}});return;}
+   if(method==="PUT"){catalog[idx]=Object.assign({},payload,{BookNum:id});d.resolve();return;}
+   if(method==="DELETE"){catalog.splice(idx,1);d.resolve();return;}
+   d.reject({status:400});
+  },85);
+  return d.promise();
+ };
+})();
+</script><script src="图书馆理模块/Scripts/book.js"></script>
+<div id="__bookspace_demo_notice" style="position:fixed;right:14px;bottom:14px;z-index:500;background:#6D4934;color:#fffaf4;padding:11px 15px;border-radius:8px;box-shadow:0 10px 25px #4B301C30;font:600 12px Segoe UI,Microsoft YaHei UI,sans-serif">交互演示 · 虚构数据（未连接数据库）</div></body>
+</html>

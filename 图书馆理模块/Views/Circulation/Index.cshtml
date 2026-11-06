@@ -1,0 +1,170 @@
+@{
+    Layout = null;
+    ViewBag.Title = "馆藏流通 · BOOKSPACE";
+}
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#F7F3EE" />
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="@Url.Content("~/Content/BookManagement.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/Circulation.css")" />
+</head>
+<body data-api-base="@Url.Content("~/api")">
+    <div class="app-shell">
+        <aside class="sidebar">
+            <a class="brand" href="@Url.Action("Index", "Home")" aria-label="BOOKSPACE 首页">
+                <span class="brand-glyph" aria-hidden="true"><span class="glyph-leaf"></span><span class="glyph-page"></span></span>
+                <span>bookspace<small>你的私人书籍档案</small></span>
+            </a>
+            <div class="nav-heading">LIBRARY</div>
+            <nav class="main-nav" aria-label="主导航">
+                <a class="nav-item circ-link" href="@Url.Action("Index", "Home")">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="4.5" width="5" height="15" rx="1"/><rect x="10" y="4.5" width="5" height="15" rx="1"/><path d="m17 7 3.5 11.5M2.5 20h19"/></svg>
+                    发现书籍
+                </a>
+                <a class="nav-item circ-link is-active" href="@Url.Action("Index", "Circulation")" aria-current="page">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="14" height="16" rx="2"/><path d="M8 8h7M8 12h5M20 10v8m-3-3 3 3 3-3"/></svg>
+                    馆藏流通
+                </a>
+            </nav>
+            <div class="nav-heading">WORKFLOW</div>
+            <div class="circ-nav-caption">01 · 图书入库</div>
+            <div class="circ-nav-caption">02 · 读者建档</div>
+            <div class="circ-nav-caption">03 · 借阅归还</div>
+            <div class="circ-nav-caption">04 · 预约排队</div>
+            <div class="sidebar-bottom">
+                <div class="side-ornament" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+                <span>EVERY BOOK HAS A JOURNEY</span>
+                <p>从收藏到流通，让阅读自然发生。</p>
+            </div>
+        </aside>
+        <main class="main-area">
+            <div class="topbar">
+                <div class="breadcrumbs">BOOKSPACE <span>/</span> <strong>馆藏流通</strong></div>
+                <div class="topbar-right"><span class="live-dot"></span> LOCAL LIBRARY WORKSPACE</div>
+            </div>
+            <div class="page circ-page">
+                <header class="circ-intro">
+                    <div>
+                        <span class="overline">LIBRARY OPERATIONS <span class="little-rule"></span> EVERY BOOK HAS A JOURNEY</span>
+                        <h1>馆藏流通<span class="circ-intro-mark">/</span></h1>
+                        <p>为每一本实体书建立记录，让入库、读者与借还都有迹可循。</p>
+                    </div>
+                    <button type="button" id="refresh-circulation" class="button button-outline">↻ 刷新数据</button>
+                </header>
+                <section class="circ-metrics" aria-label="流通总览">
+                    <div class="circ-metric"><span>实体馆藏</span><strong id="copy-count">—</strong><small>已登记的全部副本</small></div>
+                    <div class="circ-metric"><span>在馆可借</span><strong id="available-count">—</strong><small>当前可办理借阅</small></div>
+                    <div class="circ-metric"><span>活跃读者</span><strong id="reader-count">—</strong><small>已登记的有效读者</small></div>
+                    <div class="circ-metric circ-metric-emphasis"><span>在借 · 逾期</span><strong id="loan-count">—</strong><small id="overdue-count">— 笔逾期记录</small></div>
+                </section>
+
+                <p class="circ-banner" id="circ-banner" role="status" aria-live="polite">正在连接馆藏数据…</p>
+                <section class="circ-workspace" aria-label="业务工作台">
+                    <div class="circ-section-title"><span class="section-kicker">OPERATIONS <span class="section-line"></span> WORKSPACE</span><h2>流通工作台</h2><p>从入库开始，每一步都记录在案。</p></div>
+                    <div class="circ-tabs" role="tablist" aria-label="业务模块">
+                        <button type="button" id="tab-copies" class="circ-tab is-active" role="tab" aria-selected="true" aria-controls="panel-copies">01 <span>实体入库</span></button>
+                        <button type="button" id="tab-readers" class="circ-tab" role="tab" aria-selected="false" aria-controls="panel-readers">02 <span>读者管理</span></button>
+                        <button type="button" id="tab-loans" class="circ-tab" role="tab" aria-selected="false" aria-controls="panel-loans">03 <span>借阅归还</span></button>
+                        <button type="button" id="tab-reservations" class="circ-tab" role="tab" aria-selected="false" aria-controls="panel-reservations">04 <span>预约队列</span></button>
+                    </div>
+
+                    <div class="circ-tab-panel" id="panel-copies" role="tabpanel" aria-labelledby="tab-copies">
+                        <div class="circ-two-pane">
+                            <section class="circ-card circ-form-card">
+                                <div class="circ-card-kicker">BOOK INTAKE · 01</div>
+                                <h3>登记一本实体书</h3>
+                                <p class="circ-card-description">先在书架页面添加书目，再为每一册真实的书登记独立编号。</p>
+                                <form id="copy-form" class="circ-form">
+                                    <label for="copy-book">选择书目 <em>*</em><select id="copy-book" required><option value="">请选择已有书目</option></select></label>
+                                    <label for="copy-barcode">实体册号 / 条码 <em>*</em><input id="copy-barcode" required maxlength="32" minlength="3" pattern="[A-Za-z0-9-]{3,32}" autocomplete="off" placeholder="例如 BK-0001" /></label>
+                                    <label for="copy-location">馆藏位置<input id="copy-location" maxlength="80" autocomplete="off" placeholder="例如 A区-02架-03层" /></label>
+                                    <p class="circ-field-hint">每册实体书都有独立条码。同一种书可以登记多册。</p>
+                                    <button class="button button-dark circ-submit" type="submit">登记实体副本 <span aria-hidden="true">↗</span></button>
+                                </form>
+                            </section>
+                            <section class="circ-card circ-list-card">
+                                <div class="circ-card-top"><div><div class="circ-card-kicker">PHYSICAL COLLECTION</div><h3>馆藏副本</h3></div><span id="copies-tally" class="circ-tally">—</span></div>
+                                <p class="circ-card-description">查看每一册的位置与借阅状态。</p>
+                                <div class="circ-table-wrap"><table class="circ-table"><thead><tr><th>实体册号</th><th>书名</th><th>馆藏位置</th><th>状态</th></tr></thead><tbody id="copies-body"></tbody></table></div>
+                                <div class="circ-table-empty" id="copies-empty" hidden>目前还没有实体副本，先登记第一册。</div>
+                            </section>
+                        </div>
+                    </div>
+
+                    <div class="circ-tab-panel" id="panel-readers" role="tabpanel" aria-labelledby="tab-readers" hidden>
+                        <div class="circ-two-pane">
+                            <section class="circ-card circ-form-card">
+                                <div class="circ-card-kicker">READERS · 02</div>
+                                <h3 id="reader-form-title">建立读者档案</h3>
+                                <p class="circ-card-description">用读者证号标识借阅者，避免同名读者发生混淆。</p>
+                                <form id="reader-form" class="circ-form">
+                                    <label for="reader-card">读者证号 <em>*</em><input id="reader-card" required maxlength="32" minlength="3" pattern="[A-Za-z0-9-]{3,32}" autocomplete="off" placeholder="例如 RD-0001" /></label>
+                                    <label for="reader-name">读者姓名 <em>*</em><input id="reader-name" required maxlength="50" autocomplete="off" placeholder="请输入真实姓名" /></label>
+                                    <label for="reader-phone">联系方式<input id="reader-phone" maxlength="30" autocomplete="off" placeholder="选填，仅在本地保存" /></label>
+                                    <p class="circ-field-hint">借阅记录会使用读者证号关联，不依赖姓名唯一性。</p>
+                                    <button class="button button-dark circ-submit" type="submit" id="reader-submit">添加读者 <span aria-hidden="true">↗</span></button><button type="button" class="button button-outline" id="reader-edit-cancel" hidden>取消编辑</button>
+                                </form>
+                            </section>
+                            <section class="circ-card circ-list-card">
+                                <div class="circ-card-top"><div><div class="circ-card-kicker">READER DIRECTORY</div><h3>读者目录</h3></div><span id="readers-tally" class="circ-tally">—</span></div>
+                                <p class="circ-card-description">仅本机访问，避免公开暴露个人信息。</p>
+                                <div class="circ-table-wrap"><table class="circ-table"><thead><tr><th>读者证号</th><th>姓名</th><th>联系方式</th><th>状态</th><th>操作</th></tr></thead><tbody id="readers-body"></tbody></table></div>
+                                <div class="circ-table-empty" id="readers-empty" hidden>暂无读者档案。</div>
+                            </section>
+                        </div>
+                    </div>
+
+                    <div class="circ-tab-panel" id="panel-loans" role="tabpanel" aria-labelledby="tab-loans" hidden>
+                        <div class="circ-two-pane">
+                            <section class="circ-card circ-form-card">
+                                <div class="circ-card-kicker">BORROW & RETURN · 03</div>
+                                <h3>办理借阅</h3>
+                                <p class="circ-card-description">只允许借出在馆的实体书，自动记录到期日。</p>
+                                <form id="loan-form" class="circ-form">
+                                    <label for="loan-reader">借阅读者 <em>*</em><select id="loan-reader" required><option value="">选择读者</option></select></label>
+                                    <label for="loan-copy">在馆图书副本 <em>*</em><select id="loan-copy" required><option value="">选择可借实体书</option></select></label>
+                                    <div class="circ-rule-note"><strong>14 天</strong><span>默认借期 · 每位读者最多同时借阅 5 册</span></div>
+                                    <button class="button button-dark circ-submit" type="submit">确认借出 <span aria-hidden="true">↗</span></button>
+                                </form>
+                            </section>
+                            <section class="circ-card circ-list-card">
+                                <div class="circ-card-top"><div><div class="circ-card-kicker">LOAN RECORDS</div><h3>借阅记录</h3></div><span id="loans-tally" class="circ-tally">—</span></div>
+                                <p class="circ-card-description">正在借阅的记录优先显示；归还必须明确确认。每笔借阅最多续借一次，预约等待时不能续借。</p><label class="circ-inline-filter" for="only-overdue"><input type="checkbox" id="only-overdue" /> 仅显示逾期</label>
+                                <div class="circ-table-wrap"><table class="circ-table"><thead><tr><th>书籍 / 实体册号</th><th>读者</th><th>到期日期</th><th>状态</th><th>操作</th></tr></thead><tbody id="loans-body"></tbody></table></div>
+                                <div class="circ-table-empty" id="loans-empty" hidden>还没有借阅记录。</div>
+                                <div class="circ-footnote">显示全部借阅记录，时间以本地时区展示。数据规模增长后需增加服务端分页。</div>                            </section>
+                        </div>
+                    </div>
+                    <div class="circ-tab-panel" id="panel-reservations" role="tabpanel" aria-labelledby="tab-reservations" hidden>
+                        <div class="circ-two-pane">
+                            <section class="circ-card circ-form-card">
+                                <div class="circ-card-kicker">RESERVATIONS · 04</div>
+                                <h3>预约一本书</h3>
+                                <p class="circ-card-description">当书籍已借完时，可以排队等待。存在预约队列时，借阅按先来后到办理。</p>
+                                <form id="reservation-form" class="circ-form">
+                                    <label for="reservation-book">选择书目 <em>*</em><select id="reservation-book" required><option value="">请选择书目</option></select></label>
+                                    <label for="reservation-reader">预约读者 <em>*</em><select id="reservation-reader" required><option value="">请选择有效读者</option></select></label>
+                                    <p class="circ-field-hint">可借副本充足且无人排队时，请直接办理借阅。预约不自动发短信，也不自动分配某一实体册。</p>
+                                    <button type="submit" class="button button-dark circ-submit">加入预约队列 <span aria-hidden="true">↗</span></button>
+                                </form>
+                            </section>
+                            <section class="circ-card circ-list-card">
+                                <div class="circ-card-top"><div><div class="circ-card-kicker">WAITING QUEUE</div><h3>预约记录</h3></div><span class="circ-tally" id="reservations-tally">—</span></div>
+                                <p class="circ-card-description">未完成预约优先排序，已履约和已取消的记录会保留。</p>
+                                <div class="circ-table-wrap"><table class="circ-table"><thead><tr><th>书名</th><th>读者</th><th>预约日期</th><th>状态</th><th>操作</th></tr></thead><tbody id="reservations-body"></tbody></table></div>
+                                <div class="circ-table-empty" id="reservations-empty" hidden>当前没有预约记录。</div>
+                            </section>
+                        </div>
+                    </div>                </section>
+                <footer class="circ-footer"><span>BOOKSPACE · LIBRARY CIRCULATION</span><span>保持每一本书的流通可追溯</span></footer>
+            </div>
+        </main>
+    </div>
+    <script src="@Url.Content("~/Scripts/jquery-3.4.1.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/circulation.js")"></script>
+</body>
+</html>

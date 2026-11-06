@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33403.182
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookManagement", "图书馆理模块\BookManagement.csproj", "{069F8150-98A8-4C97-8FE9-3DB05549F621}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{069F8150-98A8-4C97-8FE9-3DB05549F621}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{069F8150-98A8-4C97-8FE9-3DB05549F621}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{069F8150-98A8-4C97-8FE9-3DB05549F621}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{069F8150-98A8-4C97-8FE9-3DB05549F621}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E6D3721A-0110-4427-B942-AEDA0CB32F41}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,47 @@
+# BOOKSPACE: user settings, machine-specific paths and secrets
+/.vs/
+/packages/
+/图书馆理模块/Web.config
+**/*.user
+**/*.suo
+**/*.userosscache
+**/*.sln.docstates
+*.local
+.env
+.env.*
+!.env.example
+**/secrets.json
+**/*.pfx
+**/*.p12
+**/*.pem
+**/*.key
+# Generated build output and downloaded dependencies
+**/bin/
+**/obj/
+**/Debug/
+**/Release/
+**/TestResults/
+**/.vs/
+**/node_modules/
+*.pdb
+*.cache
+*.tmp
+*.log
+*.bak
+*.zip
+*.nupkg
+# Local SQL Server data files
+*.mdf
+*.ldf
+# Old stand-alone QA output; curated screenshots live in assets/
+__bookspace_desktop.png
+__bookspace_mobile.png
+__bookspace_wood*.png
+__circulation_*_qa.png
+# No redistribution of third-party font files with unreviewed licenses
+*.woff
+*.woff2
+*.ttf
+*.otf
+# Bootstrap glyphicons font assets are not redistributed
+/图书馆理模块/fonts/

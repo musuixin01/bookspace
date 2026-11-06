@@ -1,0 +1,10 @@
+# Normalize source files when committed, preserve Windows solution/project endings.
+* text=auto
+*.sln text eol=crlf
+*.csproj text eol=crlf
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
